@@ -68,7 +68,7 @@ export abstract class GraphQL {
             if (tdsl && !("properties" in tdsl)) {
                 let properties = tdsl as Record,
                     conditions = Object.keys(properties).reduce((p, c) => {
-                        properties[c] !== null && p.push({ field: c, operator: "eq", value: properties[c] }); // 如果 record 的属性值不为 null，则将该属性值作为查询条件
+                        properties[c] !== null && typeof properties[c] !== "object" && p.push({ field: c, operator: "eq", value: properties[c] }); // 如果 record 的属性值不为 null，则将该属性值作为查询条件
                         return p;
                     }, [] as QueryDSLTableCondition[]);
                 tdsl = { properties, conditions };
