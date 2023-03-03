@@ -24,8 +24,12 @@ export type Schema = {
 
 type QueryDSLTableCondition = {
     field: string;
-    operator: "in" | "eq";
-    value: object[] | object;
+    operator: "eq" | "gt" | "ge" | "lt" | "le" | "ne";
+    value: object;
+} | {
+    field: string;
+    operator: "in";
+    value: object[];
 }
 type QueryDSLTable = {
     properties: QueryDSL | null;
@@ -122,14 +126,24 @@ export abstract class GraphQL {
                 if (condition.value == null) {
                     throw new Error(`The value of condition ${condition.field} is null.`);
                 }
-                if (condition.operator === "in") {
-                    let values = (<object[]>condition.value).filter(v => v != null); // 去除 null 值
-                    conditions.push(`${condition.field} ${condition.operator} (${values.map(v => "?").join(", ")})`);
-                    params.push(...values);
-                }
-                if (condition.operator === "eq") {
-                    conditions.push(`${condition.field} = ?`);
-                    params.push(condition.value);
+                const operator = { eq: "=", gt: ">", ge: ">=", lt: "<", le: "<=", ne: "<>" }[condition.operator] || condition.operator;
+                switch (operator) {
+                    case "in":
+                        let values = (<object[]>condition.value).filter(v => v != null); // 去除 null 值
+                        conditions.push(`${condition.field} ${operator} (${values.map(v => "?").join(", ")})`);
+                        params.push(...values);
+                        break;
+                    case "=":
+                    case ">":
+                    case ">=":
+                    case "<":
+                    case "<=":
+                    case "<>":
+                        conditions.push(`${condition.field} ${operator} ?`);
+                        params.push(condition.value);
+                        break;
+                    default:
+                        throw new Error(`The operator ${condition.operator} is not supported.`);
                 }
             }
 
