@@ -21,7 +21,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: graphql.min.js graphql.d.ts
+        file: graphql.*
         tag: ${{ github.ref }}
         release_name: ${{ github.ref }}
         overwrite: true
