@@ -18,7 +18,7 @@ jobs:
         npm install uglify-js -g
         tsc -t es2016 -d graphql.ts && uglifyjs graphql.js -m -o graphql.min.js
     - name: Upload to release
-      uses: wangyoucao577/go-release-action@v1.37
+      uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: graphql.*
