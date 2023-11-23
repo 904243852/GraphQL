@@ -371,10 +371,10 @@ export abstract class GraphQL {
         const requests: MutationRequests = {};
 
         // 构造请求
-        this.toMutationRequests(dsl, this.schema, requests);
+        this.toMutationRequests(dsl, <SubSchema>this.schema, requests);
 
         // 执行请求
-        this.doMutateRequests(requests, this.schema);
+        this.doMutateRequests(requests, <SubSchema>this.schema);
 
         return dsl;
     }
