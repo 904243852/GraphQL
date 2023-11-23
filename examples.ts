@@ -33,6 +33,8 @@ export class SqliteGraphQL extends GraphQL {
     }
 }
 
+//#region test
+
 // 创建一个基于 SQLite 的 GraphQL 实例
 let graphql = new SqliteGraphQL({
     offering: {
@@ -187,3 +189,5 @@ console.info("Query:", JSON.stringify(
         }
     }), null, "    "
 ));
+
+//#endregion
